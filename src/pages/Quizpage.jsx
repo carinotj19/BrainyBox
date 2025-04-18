@@ -65,22 +65,35 @@ function QuizPage() {
 
   const nextQuestion = async () => {
     const next = current + 1;
+    const token = localStorage.getItem("token");
+
     if (next < questions.length) {
       setCurrent(next);
       setAnswers(shuffleAnswers(questions[next]));
       setSelected(null);
       setTimer(15);
     } else {
-      try {
-        await axios.post("http://localhost:4000/api/results", {
-          score,
-          total: questions.length,
-          category: questions[current].category,
-          difficulty: questions[current].difficulty,
-        });
-      } catch (err) {
-        console.error("Failed to save result:", err.message);
+      if (token) {
+        try {
+          await axios.post(
+            "http://localhost:4000/api/results",
+            {
+              score,
+              total: questions.length,
+              category: questions[current].category,
+              difficulty: questions[current].difficulty,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        } catch (err) {
+          console.error("Failed to save result:", err.message);
+        }
       }
+
       setShowResult(true);
     }
   };

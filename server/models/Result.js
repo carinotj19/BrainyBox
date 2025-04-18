@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const resultSchema = new mongoose.Schema({
+  user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   score: Number,
   total: Number,
   category: String,
