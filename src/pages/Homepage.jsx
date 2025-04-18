@@ -9,6 +9,7 @@ function HomePage() {
     difficulty: "easy",
     amount: 5,
   });
+  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -98,17 +99,33 @@ function HomePage() {
           Start Quiz
         </button>
 
-        <div className="text-sm text-center text-gray-600 mt-4">
-          Want to save your progress?{" "}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Register here
-          </Link>
-          <br />
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Login here
-          </Link>
-        </div>
+        {!user ? (
+          <div className="text-sm text-center text-gray-600">
+            Want to save your progress?{" "}
+            <Link to="/register" className="text-blue-600 hover:underline">
+              Register here
+            </Link>
+            <br />
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 hover:underline">
+              Login here
+            </Link>
+          </div>
+        ) : (
+          <div className="text-sm text-center text-gray-700">
+            Logged in as <span className="font-medium">{user.username}</span>.{" "}
+            <button
+              className="text-red-600 hover:underline ml-1"
+              onClick={() => {
+                localStorage.removeItem("user");
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+            >
+              Logout
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
