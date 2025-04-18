@@ -41,4 +41,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.get("/ping", (req, res) => {
+  res.send("Auth route is working");
+});
+
 export default router;
