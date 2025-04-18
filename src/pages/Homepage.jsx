@@ -114,6 +114,14 @@ function HomePage() {
         ) : (
           <div className="text-sm text-center text-gray-700">
             Logged in as <span className="font-medium">{user.username}</span>.{" "}
+            <div className="flex justify-center">
+              <Link
+                to="/history"
+                className="text-blue-600 hover:underline text-sm flex items-center gap-1 mt-2"
+              >
+                <span>📜</span> View My Quiz History
+              </Link>
+            </div>
             <button
               className="text-red-600 hover:underline ml-1"
               onClick={() => {
