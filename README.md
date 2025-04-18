@@ -1,45 +1,67 @@
-# BrainyBox – Trivia Quiz App
+# 🧠 BrainyBox – Full Stack Trivia Quiz App
 
-BrainyBox is a full stack trivia quiz app that uses the Open Trivia DB API to serve questions from a wide range of categories and difficulties. Users can select their preferences, take quizzes, and track their scores.
-
-This version covers the frontend built with **React** and styled using **Tailwind CSS**.
+BrainyBox is a full stack trivia quiz app where users can take quizzes from a wide range of categories and difficulties using real-time data from the Open Trivia DB. It features persistent quiz progress, user accounts, history tracking, and a live leaderboard.
 
 ---
 
-## Features
+## ✨ Features
 
-- Choose quiz category, difficulty, and number of questions
-- Dynamic question loading from Open Trivia DB
-- Multiple choice and true/false formats
-- Instant score feedback
-- Clean, responsive UI built with Tailwind CSS
-
----
-
-## Tech Stack
-
-- **Frontend:** React (Vite) + Tailwind CSS
-- **API:** [Open Trivia DB](https://opentdb.com/)
-- **Backend (planned):** Node.js + Express + MongoDB (coming soon)
+- ✅ Select quiz category, difficulty, and number of questions
+- ✅ Answer multiple choice questions with live score tracking
+- ✅ Save results to user history
+- ✅ Resume unfinished quizzes (session-based persistence)
+- ✅ View quiz history with stats
+- ✅ Global leaderboard (with medals + tabs for each difficulty)
+- ✅ Clean responsive UI with smooth transitions
 
 ---
 
-## Setup
+## 🛠️ Tech Stack
+
+| Layer     | Stack                        |
+|-----------|------------------------------|
+| Frontend  | React + Vite + Tailwind CSS  |
+| Backend   | Node.js + Express + MongoDB  |
+| Auth      | JWT-based with local storage |
+| API       | [Open Trivia DB](https://opentdb.com/) |
+
+---
+
+## 🚀 Setup
 
 ```bash
 git clone https://github.com/yourusername/brainybox.git
 cd brainybox
+
+# install frontend deps
 npm install
+
+# install backend deps
+cd server
+npm install
+
+# start backend
+npm run dev
+
+# go back to frontend and start
+cd ..
 npm run dev
 ```
 
-## Project Roadmap
+** ✅ Make sure MongoDB is running locally or set MONGO_URI in a .env file inside /server **
 
-- Frontend UI with category & difficulty selection
-- API integration with Open Trivia DB
-- User authentication and score history
-- Backend with Express and MongoDB
-- Leaderboard and quiz history
+## 📌 Project Roadmap
+
+- [x] Frontend UI with category & difficulty selection
+- [x] API integration with Open Trivia DB
+- [x] User authentication (JWT-based)
+- [x] Quiz result saving
+- [x] Resume quiz progress (session persistence)
+- [x] Quiz history page
+- [x] Leaderboard with difficulty tabs and medals
+- [x] Smooth UI animations and polish
+- [ ] Admin dashboard for result moderation _(planned)_
+- [ ] User-created quizzes and custom sets _(planned)_
 
 ## License
 
