@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import LeaderboardWidget from "../components/LeaderboardWidget";
+import { motion } from "framer-motion";
 
 function HomePage() {
   const [categories, setCategories] = useState([]);
@@ -10,14 +10,15 @@ function HomePage() {
     difficulty: "easy",
     amount: 5,
   });
-  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const hasSavedQuiz = !!sessionStorage.getItem("quizState");
 
   useEffect(() => {
     fetch("https://opentdb.com/api_category.php")
       .then((res) => res.json())
       .then((data) => setCategories(data.trivia_categories))
-      .catch((err) => console.error("Failed to load categories", err));
+      .catch(console.error);
   }, []);
 
   const handleChange = (e) => {
@@ -35,24 +36,27 @@ function HomePage() {
   return (
     <>
       <LeaderboardWidget />
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-sky-100 p-4">
-        <form
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-100 to-indigo-100 px-4 py-10">
+        <motion.form
           onSubmit={handleSubmit}
-          className="bg-white shadow-xl rounded-xl w-full max-w-md p-6 space-y-6 animate-fade-in"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+          className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-5"
         >
-          <h1 className="text-2xl font-bold text-center text-blue-800">
+          <h1 className="text-3xl font-bold text-center text-blue-700 mb-2">
             🧠 BrainyBox
           </h1>
 
           <div>
-            <label className="block font-medium mb-1 text-gray-700">
+            <label className="block font-medium text-gray-700 mb-1">
               Category
             </label>
             <select
               name="category"
               value={form.category}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
               required
             >
               <option value="">Select a category</option>
@@ -65,14 +69,14 @@ function HomePage() {
           </div>
 
           <div>
-            <label className="block font-medium mb-1 text-gray-700">
+            <label className="block font-medium text-gray-700 mb-1">
               Difficulty
             </label>
             <select
               name="difficulty"
               value={form.difficulty}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
             >
               <option value="easy">Easy</option>
               <option value="medium">Medium</option>
@@ -81,7 +85,7 @@ function HomePage() {
           </div>
 
           <div>
-            <label className="block font-medium mb-1 text-gray-700">
+            <label className="block font-medium text-gray-700 mb-1">
               Number of Questions
             </label>
             <input
@@ -91,7 +95,7 @@ function HomePage() {
               max="50"
               value={form.amount}
               onChange={handleChange}
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
             />
           </div>
 
@@ -101,6 +105,29 @@ function HomePage() {
           >
             Start Quiz
           </button>
+          <hr className="mt-4 mb-2 border-gray-200" />
+          {hasSavedQuiz && (
+            <div className="text-sm text-center mt-1 space-y-1">
+              <p className="text-gray-600">You have a quiz in progress.</p>
+              <div className="flex justify-center space-x-4">
+                <button
+                  onClick={() => navigate("/quiz?resume=true")}
+                  className="text-blue-600 hover:underline"
+                >
+                  Resume
+                </button>
+                <button
+                  onClick={() => {
+                    sessionStorage.removeItem("quizState");
+                    window.location.reload();
+                  }}
+                  className="text-red-600 hover:underline"
+                >
+                  Discard
+                </button>
+              </div>
+            </div>
+          )}
 
           {!user ? (
             <div className="text-sm text-center text-gray-600">
@@ -115,29 +142,36 @@ function HomePage() {
               </Link>
             </div>
           ) : (
-            <div className="text-sm text-center text-gray-700">
-              Logged in as <span className="font-medium">{user.username}</span>.{" "}
+            <>
+              <div className="text-sm text-center text-gray-700">
+                Logged in as{" "}
+                <span className="font-medium">{user.username}</span>.
+              </div>
+
               <div className="flex justify-center">
                 <Link
                   to="/history"
-                  className="text-blue-600 hover:underline text-sm flex items-center gap-1 mt-2"
+                  className="text-blue-600 hover:underline text-sm mt-2"
                 >
-                  <span>📜</span> View My Quiz History
+                  📜 View My Quiz History
                 </Link>
               </div>
-              <button
-                className="text-red-600 hover:underline ml-1"
-                onClick={() => {
-                  localStorage.removeItem("user");
-                  localStorage.removeItem("token");
-                  window.location.reload();
-                }}
-              >
-                Logout
-              </button>
-            </div>
+
+              <div className="text-center">
+                <button
+                  onClick={() => {
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("token");
+                    window.location.reload();
+                  }}
+                  className="text-red-600 hover:underline text-sm mt-1"
+                >
+                  Logout
+                </button>
+              </div>
+            </>
           )}
-        </form>
+        </motion.form>
       </div>
     </>
   );
