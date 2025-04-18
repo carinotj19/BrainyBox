@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function decodeHtml(html) {
   const txt = document.createElement("textarea");
@@ -62,7 +63,7 @@ function QuizPage() {
     if (isCorrect) setScore((prev) => prev + 1);
   };
 
-  const nextQuestion = () => {
+  const nextQuestion = async () => {
     const next = current + 1;
     if (next < questions.length) {
       setCurrent(next);
@@ -70,6 +71,16 @@ function QuizPage() {
       setSelected(null);
       setTimer(15);
     } else {
+      try {
+        await axios.post("http://localhost:4000/api/results", {
+          score,
+          total: questions.length,
+          category: questions[current].category,
+          difficulty: questions[current].difficulty,
+        });
+      } catch (err) {
+        console.error("Failed to save result:", err.message);
+      }
       setShowResult(true);
     }
   };
@@ -112,13 +123,13 @@ function QuizPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-sky-100 p-4">
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
-        <div
-          className="h-full bg-blue-500 transition-all duration-300"
-          style={{ width: `${((current + 1) / questions.length) * 100}%` }}
-        ></div>
-      </div>
       <div className="bg-white shadow-xl rounded-xl w-full max-w-2xl p-6 space-y-6 animate-fade-in">
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden mb-4">
+          <div
+            className="h-full bg-blue-500 transition-all duration-300"
+            style={{ width: `${((current + 1) / questions.length) * 100}%` }}
+          ></div>
+        </div>
         <div className="flex justify-between items-center text-sm">
           <span
             className={`px-3 py-1 rounded-full font-medium ${getDifficultyColor(
