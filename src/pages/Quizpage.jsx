@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 function decodeHtml(html) {
   const txt = document.createElement("textarea");
@@ -177,9 +178,10 @@ function QuizPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-sky-100 p-6">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.4 }}
           className="bg-white rounded-xl shadow-xl p-8 max-w-md w-full text-center"
         >
           <h1 className="text-2xl font-bold mb-3">🎉 Quiz Complete</h1>

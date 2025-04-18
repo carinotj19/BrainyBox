@@ -1,7 +1,8 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import LeaderboardWidget from "../components/LeaderboardWidget";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 function HomePage() {
   const [categories, setCategories] = useState([]);
@@ -42,62 +43,70 @@ function HomePage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-5"
+          className="bg-white shadow-xl rounded-xl p-6 sm:p-8 w-full max-w-md space-y-4"
         >
-          <h1 className="text-3xl font-bold text-center text-blue-700 mb-2">
+          <h1 className="text-3xl font-bold text-center text-blue-700 mb-1">
             🧠 BrainyBox
           </h1>
 
-          <div>
-            <label className="block font-medium text-gray-700 mb-1">
-              Category
-            </label>
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <motion.div
+            key={`${form.category}-${form.difficulty}-${form.amount}`}
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="space-y-4"
+          >
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">
+                Category
+              </label>
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
+                required
+              >
+                <option value="">Select a category</option>
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          <div>
-            <label className="block font-medium text-gray-700 mb-1">
-              Difficulty
-            </label>
-            <select
-              name="difficulty"
-              value={form.difficulty}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
-            >
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-          </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">
+                Difficulty
+              </label>
+              <select
+                name="difficulty"
+                value={form.difficulty}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
+              >
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="block font-medium text-gray-700 mb-1">
-              Number of Questions
-            </label>
-            <input
-              type="number"
-              name="amount"
-              min="1"
-              max="50"
-              value={form.amount}
-              onChange={handleChange}
-              className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
-            />
-          </div>
+            <div>
+              <label className="block font-medium text-gray-700 mb-1">
+                Number of Questions
+              </label>
+              <input
+                type="number"
+                name="amount"
+                min="1"
+                max="50"
+                value={form.amount}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-blue-200"
+              />
+            </div>
+          </motion.div>
 
           <button
             type="submit"
@@ -105,71 +114,82 @@ function HomePage() {
           >
             Start Quiz
           </button>
-          <hr className="mt-4 mb-2 border-gray-200" />
-          {hasSavedQuiz && (
-            <div className="text-sm text-center mt-1 space-y-1">
-              <p className="text-gray-600">You have a quiz in progress.</p>
-              <div className="flex justify-center space-x-4">
-                <button
-                  onClick={() => navigate("/quiz?resume=true")}
-                  className="text-blue-600 hover:underline"
-                >
-                  Resume
-                </button>
-                <button
-                  onClick={() => {
-                    sessionStorage.removeItem("quizState");
-                    window.location.reload();
-                  }}
-                  className="text-red-600 hover:underline"
-                >
-                  Discard
-                </button>
-              </div>
-            </div>
-          )}
+          <AnimatePresence>
+            {hasSavedQuiz && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.25 }}
+                className="text-sm text-center mt-3 space-y-1"
+              >
+                <p className="text-gray-600">You have a quiz in progress.</p>
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={() => navigate("/quiz?resume=true")}
+                    className="text-blue-600 hover:underline"
+                  >
+                    Resume
+                  </button>
+                  <button
+                    onClick={() => {
+                      sessionStorage.removeItem("quizState");
+                      window.location.reload();
+                    }}
+                    className="text-red-600 hover:underline"
+                  >
+                    Discard
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+          <hr className="my-4 border-gray-200" />
 
           {!user ? (
-            <div className="text-sm text-center text-gray-600">
-              Want to save your progress?{" "}
-              <Link to="/register" className="text-blue-600 hover:underline">
-                Register here
-              </Link>
-              <br />
-              Already have an account?{" "}
-              <Link to="/login" className="text-blue-600 hover:underline">
-                Login here
-              </Link>
+            <div className="text-sm text-center text-gray-600 space-y-1">
+              <p>
+                Want to save your progress?{" "}
+                <Link to="/register" className="text-blue-600 hover:underline">
+                  Register here
+                </Link>
+              </p>
+              <p>
+                Already have an account?{" "}
+                <Link to="/login" className="text-blue-600 hover:underline">
+                  Login here
+                </Link>
+              </p>
             </div>
           ) : (
-            <>
-              <div className="text-sm text-center text-gray-700">
+            <div className="text-sm text-center text-gray-700 space-y-2">
+              <p>
                 Logged in as{" "}
-                <span className="font-medium">{user.username}</span>.
-              </div>
+                <span className="font-medium text-gray-800">
+                  {user.username}
+                </span>
+              </p>
 
-              <div className="flex justify-center">
-                <Link
-                  to="/history"
-                  className="text-blue-600 hover:underline text-sm mt-2"
-                >
-                  📜 View My Quiz History
-                </Link>
-              </div>
+              <Link
+                to="/history"
+                className="text-blue-600 hover:underline inline-block"
+              >
+                📜 View My Quiz History
+              </Link>
 
-              <div className="text-center">
+              <div>
                 <button
                   onClick={() => {
                     localStorage.removeItem("user");
                     localStorage.removeItem("token");
                     window.location.reload();
                   }}
-                  className="text-red-600 hover:underline text-sm mt-1"
+                  className="text-red-600 hover:underline"
                 >
                   Logout
                 </button>
               </div>
-            </>
+            </div>
           )}
         </motion.form>
       </div>
