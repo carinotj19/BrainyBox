@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function HomePage() {
   const [categories, setCategories] = useState([]);
   const [form, setForm] = useState({
     category: "",
     difficulty: "easy",
-    amount: 5
+    amount: 5,
   });
   const navigate = useNavigate();
 
@@ -24,7 +25,9 @@ function HomePage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    navigate(`/quiz?amount=${form.amount}&category=${form.category}&difficulty=${form.difficulty}`);
+    navigate(
+      `/quiz?amount=${form.amount}&category=${form.category}&difficulty=${form.difficulty}`
+    );
   };
 
   return (
@@ -33,10 +36,14 @@ function HomePage() {
         onSubmit={handleSubmit}
         className="bg-white shadow-xl rounded-xl w-full max-w-md p-6 space-y-6 animate-fade-in"
       >
-        <h1 className="text-2xl font-bold text-center text-blue-800">🧠 BrainyBox</h1>
+        <h1 className="text-2xl font-bold text-center text-blue-800">
+          🧠 BrainyBox
+        </h1>
 
         <div>
-          <label className="block font-medium mb-1 text-gray-700">Category</label>
+          <label className="block font-medium mb-1 text-gray-700">
+            Category
+          </label>
           <select
             name="category"
             value={form.category}
@@ -54,7 +61,9 @@ function HomePage() {
         </div>
 
         <div>
-          <label className="block font-medium mb-1 text-gray-700">Difficulty</label>
+          <label className="block font-medium mb-1 text-gray-700">
+            Difficulty
+          </label>
           <select
             name="difficulty"
             value={form.difficulty}
@@ -68,7 +77,9 @@ function HomePage() {
         </div>
 
         <div>
-          <label className="block font-medium mb-1 text-gray-700">Number of Questions</label>
+          <label className="block font-medium mb-1 text-gray-700">
+            Number of Questions
+          </label>
           <input
             type="number"
             name="amount"
@@ -86,6 +97,18 @@ function HomePage() {
         >
           Start Quiz
         </button>
+
+        <div className="text-sm text-center text-gray-600 mt-4">
+          Want to save your progress?{" "}
+          <Link to="/register" className="text-blue-600 hover:underline">
+            Register here
+          </Link>
+          <br />
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Login here
+          </Link>
+        </div>
       </form>
     </div>
   );
