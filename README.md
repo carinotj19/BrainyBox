@@ -41,7 +41,7 @@ cd server
 npm install
 
 # start backend
-npm run dev
+npm run start
 
 # go back to frontend and start
 cd ..
