@@ -30,7 +30,7 @@ BrainyBox is a full stack trivia quiz app where users can take quizzes from a wi
 ## 🚀 Setup
 
 ```bash
-git clone https://github.com/yourusername/brainybox.git
+git clone https://github.com/carinotj19/brainybox.git
 cd brainybox
 
 # install frontend deps
