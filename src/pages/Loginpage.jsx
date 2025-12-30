@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { apiClient, isDemo } from "../services/api";
+import { demoUser } from "../services/demoData";
 
 function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -13,8 +14,18 @@ function LoginPage() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (isDemo) {
+      const user = {
+        username: demoUser.username,
+        email: form.email || demoUser.email,
+      };
+      localStorage.setItem("token", "demo-token");
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/");
+      return;
+    }
     try {
-      const res = await axios.post("http://localhost:4000/api/auth/login", form);
+      const res = await apiClient.post("/api/auth/login", form);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("user", JSON.stringify(res.data.user));
       navigate("/");

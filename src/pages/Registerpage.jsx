@@ -1,6 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { apiClient, isDemo } from "../services/api";
+import { demoUser } from "../services/demoData";
 
 function RegisterPage() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -13,8 +14,18 @@ function RegisterPage() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (isDemo) {
+      const user = {
+        username: form.username || demoUser.username,
+        email: form.email || demoUser.email,
+      };
+      localStorage.setItem("token", "demo-token");
+      localStorage.setItem("user", JSON.stringify(user));
+      navigate("/");
+      return;
+    }
     try {
-      await axios.post("http://localhost:4000/api/auth/register", form);
+      await apiClient.post("/api/auth/register", form);
       navigate("/login");
     } catch (err) {
       setError(err.response?.data?.error || "Something went wrong");

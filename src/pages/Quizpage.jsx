@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { motion } from "framer-motion";
+import { apiClient, isDemo } from "../services/api";
 
 function decodeHtml(html) {
   const txt = document.createElement("textarea");
@@ -130,22 +130,18 @@ function QuizPage() {
       setSelected(null);
       setTimer(15);
     } else {
-      if (token) {
+      if (!isDemo && token) {
         try {
-          await axios.post(
-            "http://localhost:4000/api/results",
-            {
-              score,
-              total: questions.length,
-              category: questions[current].category,
-              difficulty: questions[current].difficulty,
+          await apiClient.post("/api/results", {
+            score,
+            total: questions.length,
+            category: questions[current].category,
+            difficulty: questions[current].difficulty,
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
             },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          });
         } catch (err) {
           console.error("Failed to save result:", err.message);
         }

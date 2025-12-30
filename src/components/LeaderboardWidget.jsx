@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { apiUrl, isDemo } from "../services/api";
+import { demoLeaderboard } from "../services/demoData";
 
 function LeaderboardWidget() {
   const [data, setData] = useState({ easy: [], medium: [], hard: [] });
@@ -7,7 +9,12 @@ function LeaderboardWidget() {
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    fetch("http://localhost:4000/api/results/leaderboard")
+    if (isDemo) {
+      setData(demoLeaderboard);
+      return;
+    }
+
+    fetch(apiUrl("/api/results/leaderboard"))
       .then(res => res.json())
       .then(setData)
       .catch(() => {});

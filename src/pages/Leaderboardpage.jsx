@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { motion } from "framer-motion";
+import { apiClient, isDemo } from "../services/api";
+import { demoLeaderboard } from "../services/demoData";
 
 const difficulties = ["easy", "medium", "hard"];
 
@@ -10,8 +11,13 @@ function LeaderboardPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios
-      .get("http://localhost:4000/api/results/leaderboard")
+    if (isDemo) {
+      setResults(demoLeaderboard);
+      return;
+    }
+
+    apiClient
+      .get("/api/results/leaderboard")
       .then((res) => setResults(res.data))
       .catch(() => setError("Failed to load leaderboard"));
   }, []);

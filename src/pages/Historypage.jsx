@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiClient, isDemo } from "../services/api";
+import { demoHistory } from "../services/demoData";
 
 function HistoryPage() {
   const [results, setResults] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (isDemo) {
+      setResults(demoHistory);
+      return;
+    }
+
     const token = localStorage.getItem("token");
     if (!token) {
       setError("You must be logged in to view your history.");
       return;
     }
 
-    axios
-      .get("http://localhost:4000/api/results/my", {
+    apiClient
+      .get("/api/results/my", {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setResults(res.data))

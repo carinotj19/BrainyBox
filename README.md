@@ -63,6 +63,12 @@ npm run dev
 - [ ] Admin dashboard for result moderation _(planned)_
 - [ ] User-created quizzes and custom sets _(planned)_
 
+## Static Demo Mode (no backend)
+
+- Set `VITE_DEMO_MODE=true` in your `.env.production` (or use the provided `.env.production.example`) so the app skips all backend calls and uses mock leaderboard/history data.
+- Build and deploy the frontend (e.g., GitHub Pages); the quiz questions still come from the public OpenTDB API.
+- If you want real data later, unset `VITE_DEMO_MODE` and provide `VITE_API_URL` for your deployed API.
+
 ## License
 
 MIT
